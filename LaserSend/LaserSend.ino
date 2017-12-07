@@ -22,7 +22,7 @@
 
 int incomingByte = 0;   // for incoming serial data
 
-#define SPEED (10)
+#define SPEED (300)
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -45,16 +45,16 @@ void loop() {
 
     for (int i=0; i<8; i++) {
        digitalWrite(LED_BUILTIN, HIGH);
-       delay(1*SPEED);
+       myDelay(1*SPEED);
        digitalWrite(LED_BUILTIN, LOW);
       
       if (incomingByte % 2 == 1) 
          {
-          delay(2*SPEED);
+          myDelay(2*SPEED);
          }
         else
          {
-          delay(4*SPEED);
+          myDelay(4*SPEED);
          }
          // if (i<7){
             incomingByte = incomingByte / 2;                
@@ -63,18 +63,17 @@ void loop() {
    }
 
     digitalWrite(LED_BUILTIN, HIGH);
-    delay(1*SPEED);
+    myDelay(1*SPEED);
     digitalWrite(LED_BUILTIN, LOW);
     
-    delay(8*SPEED);
+    myDelay(8*SPEED);
   }
 }
 
-
-void flash() {
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-    delay(100*SPEED);                       // wait for a second
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(100*SPEED);
+void myDelay(int d){
+  //accurate >3milliseconds
+  //delay(d);
+  //accurate >3micros, <16000micros
+  delayMicroseconds(d);
 }
 

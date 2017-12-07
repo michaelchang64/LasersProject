@@ -11,7 +11,7 @@ int newByte = 0;
 byte bits[8] = {0,0,0,0,0,0,0,0};
 int i = 0;
 
-#define SPEED (10)
+#define SPEED (300)
 
 void setup() {
   Serial.begin(9600);
@@ -29,17 +29,28 @@ void loop() {
     }
 }
 
+//check that the change was real, and not 'hardware bounce'
+//https://arduino.stackexchange.com/a/13301
+int oldValue =0;
+
 void blink() {
-  unsigned long curr = millis();
+  unsigned long curr = micros();
   int value = digitalRead(interruptPin);
+  if (oldValue==value){
+    return;
+  }
+  else{
+    oldValue=value;
+  }
+  
   if (curr-lastTime <= ((0.5)*SPEED) || curr-lastTime > (7*SPEED)) {
     state = 0;
   }
 
-   /*Serial.print("!\n");
+    /*Serial.print("!\n");
 
-   Serial.print(curr-lastTime); 
- Serial.print(" ");
+    Serial.print(curr-lastTime); 
+    Serial.print(" ");
    
     Serial.print(state);
     Serial.print(" ");
