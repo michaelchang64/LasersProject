@@ -11,13 +11,13 @@ int newByte = 0;
 byte bits[8] = {0,0,0,0,0,0,0,0};
 int i = 0;
 
-#define SPEED (300)
+#define SPEED (40)
 
 void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
   pinMode(interruptPin, INPUT_PULLUP);
-  Serial.println("read to receive...");
+  Serial.println("read to receive......");
   attachInterrupt(digitalPinToInterrupt(interruptPin), blink, CHANGE);
 }
 
@@ -43,14 +43,14 @@ void blink() {
     oldValue=value;
   }
   
-  if (curr-lastTime <= ((0.5)*SPEED) || curr-lastTime > (7*SPEED)) {
+  if (curr-lastTime <= ((0.5)*SPEED) || curr-lastTime > (5*SPEED)) {
     state = 0;
   }
 
-    /*Serial.print("!\n");
+    //Serial.print("!\n");
 
-    Serial.print(curr-lastTime); 
-    Serial.print(" ");
+    //Serial.println(curr-lastTime); 
+    /*Serial.print(" ");
    
     Serial.print(state);
     Serial.print(" ");

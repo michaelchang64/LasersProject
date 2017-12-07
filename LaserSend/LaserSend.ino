@@ -22,7 +22,7 @@
 
 int incomingByte = 0;   // for incoming serial data
 
-#define SPEED (300)
+#define SPEED (40)
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -66,7 +66,7 @@ void loop() {
     myDelay(1*SPEED);
     digitalWrite(LED_BUILTIN, LOW);
     
-    myDelay(8*SPEED);
+    myDelay(6*SPEED);
   }
 }
 
