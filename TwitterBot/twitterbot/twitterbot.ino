@@ -5,13 +5,35 @@
 #include <WiFi.h>
 #include <Twitter.h>
 
-//byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+#define SPEED (40)
+// OAuth Key
+#define TOKEN "2413286622-TKO6va6Z3Q66X96W570BhibHE6U2mfL25TZHlJA"
+// Twitter Proxy
+#define LIB_DOMAIN "arduino-tweet.appspot.com"
+
+const byte ledPin = 13;
+const byte interruptPin = 2;
+volatile int state = 0;
+
+unsigned long lastTime = 0;
+
+int readByte = 0;
+
+int newByte = 0;
+
+byte bits[8] = {0,0,0,0,0,0,0,0};
+int i = 0;
+
 char ssid[] = "YaleGuest";
 int status = WL_IDLE_STATUS;
-Twitter twitter("2413286622-TKO6va6Z3Q66X96W570BhibHE6U2mfL25TZHlJA");
-char msg[] = "Hello, world!";
+Twitter twitter(TOKEN);
 
 void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(interruptPin, INPUT_PULLUP);
+  Serial.println("read to receive...");
+  attachInterrupt(digitalPinToInterrupt(interruptPin), blink, CHANGE);
+  
   // check for the presence of the shield:
   if (WiFi.status() == WL_NO_SHIELD) {
     Serial.println("WiFi shield not present"); 
@@ -33,18 +55,6 @@ void setup() {
   Serial.print("You're connected to the network");
   printCurrentNet();
   printWifiData();
-  
-  if (twitter.post(msg)) {
-    int status = twitter.wait();
-    if (status == 200) {
-      Serial.println("OK.");
-    } else {
-      Serial.print("failed : code ");
-      Serial.println(status);
-    }
-  } else {
-    Serial.println("connection failed.");
-  }
 }
 
 void loop() {
