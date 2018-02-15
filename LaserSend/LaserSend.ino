@@ -11,7 +11,7 @@ TODO add a parity bit (req. bidirectional comms)
 
 int incomingByte = 0;   // for incoming serial data
 
-#define SPEED (1000)
+#define SPEED (1500)
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -37,23 +37,20 @@ void loop() {
     digitalWrite(LED_BUILTIN, HIGH);
     for (int i = 0; i < 8; i++) {
 
-      if (incomingByte % 2 == 1)
+      if (bitRead(incomingByte,i))
       {
-        myDelay(2 * SPEED);
+        myDelay(1 * SPEED);
       }
       else
       {
         myDelay(4 * SPEED);
       }
-      incomingByte = incomingByte / 2;
       if (i % 2 == 0) {
         digitalWrite(LED_BUILTIN, LOW);
       }
       else {
         digitalWrite(LED_BUILTIN, HIGH);
       }
-
-
     }
 
     digitalWrite(LED_BUILTIN, LOW);

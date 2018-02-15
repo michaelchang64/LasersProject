@@ -17,7 +17,7 @@ int newByte = 0;
 byte bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 int i = 0;
 
-#define SPEED (1000)
+#define SPEED (1500)
 
 void setup() {
   Serial.begin(9600);
@@ -51,17 +51,17 @@ void blink() {
     oldValue = value;
   }
 
-  if (curr - lastTime <= ((1)*SPEED) || curr - lastTime > (5 * SPEED)) {
+  if (curr - lastTime > (5 * SPEED)) {
     i = 0;
     //Serial.print(curr-lastTime);
     //Serial.println(" RESET");
   }
 
-    /*Serial.print("\n");
-    Serial.print(" ");
+    //Serial.print("\n");
+    //Serial.print(" ");
     Serial.println(curr-lastTime);
-    Serial.print(" ");
-
+    //Serial.print(" ");
+/*
     //Serial.print(state);
     //Serial.print(" ");
     Serial.print(value);
@@ -73,7 +73,7 @@ void blink() {
     //i 0 = start of byte
     case 0: i = 1;  break;
     //i 1 = end of byte
-    case 7:
+    case 8:
         readByte = 0;
         for (int j = 7; j >= 0; j--) {
           readByte = (readByte * 2) + bits[j];
