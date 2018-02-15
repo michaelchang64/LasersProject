@@ -17,7 +17,7 @@ int newByte = 0;
 byte bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 int i = 0;
 
-#define SPEED (1500)
+#define SPEED (2500)
 
 void setup() {
   Serial.begin(9600);
@@ -59,7 +59,7 @@ void blink() {
 
     //Serial.print("\n");
     //Serial.print(" ");
-    Serial.println(curr-lastTime);
+    //Serial.println(curr-lastTime);
     //Serial.print(" ");
 /*
     //Serial.print(state);

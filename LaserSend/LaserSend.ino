@@ -8,26 +8,78 @@ Every byte has a 8 'up and downs' for each bit
 
 TODO add a parity bit (req. bidirectional comms)
 */
+#include <Keypad.h>   //use the Keypad libraries
+#define SPEED (2500)
 
 int incomingByte = 0;   // for incoming serial data
+bool hasByteToSend = false;
+char byteToSend = ' ';
 
-#define SPEED (1500)
+////////
+//
+//  keypad code
+// 
+////////
+const byte ROWS = 4; //four rows
+const byte COLS = 4; //four columns
+//define the cymbols on the buttons of the keypads
+char hexaKeys[ROWS][COLS] = 
+{
+  { 
+    'A','B','C','D'      }
+  ,
+  { 
+    'E','F','G','H'      }
+  ,
+  { 
+    'I',' ','K','L'      }
+  ,
+  { 
+    'M','N','O','\n'      }
+};
+// NB using pins 0 and 1 preclude the use of Serial.print (or any Serial for that matter)
+byte rowPins[ROWS] = { 0, 1, 2, 3}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = { 4, 5, 6, 7}; //connect to the column pinouts of the keypad
+
+//initialize an instance of class NewKeypad
+Keypad customKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
+
+void readKey()
+{
+  int correct = 0;
+  char customKey = customKeypad.getKey();//get the key value
+  if(customKey)
+  {
+    //Serial.print("Entered Key: ");
+    //Serial.println(customKey);
+    byteToSend = customKey;
+    hasByteToSend = true;
+  }
+}
+
+/////////
+//
+// laser sending 
+//
+/////////
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
-  Serial.begin(9600);
+  //Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
-  Serial.println("ready to send...");
+  //Serial.println("ready to send...");
 
 
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  if (Serial.available() > 0) {
-    incomingByte = Serial.read();
+  readKey();
+  if (hasByteToSend) { //Serial.available() > 0) {
+    incomingByte = byteToSend; //Serial.read();
+    //Serial.println(incomingByte);
     /*byte bits[8] = {1, 0, 0, 0, 0, 1, 1, 0};
     incomingByte = 0;
     for (int j = 7; j >= 0; j--) {
@@ -55,7 +107,7 @@ void loop() {
 
     digitalWrite(LED_BUILTIN, LOW);
     myDelay(6 * SPEED);
-
+    hasByteToSend = false;
   }
 }
 
