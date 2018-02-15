@@ -19,7 +19,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
-  Serial.println("read to send...");
+  Serial.println("ready to send...");
 
 
 }
