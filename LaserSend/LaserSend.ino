@@ -1,28 +1,17 @@
 /*
-  Blink
-  Turns on an LED on for one second, then off for one second, repeatedly.
+Sending a message byte by byte using a timed protocol.
 
-  Most Arduinos have an on-board LED you can control. On the UNO, MEGA and ZERO 
-  it is attached to digital pin 13, on MKR1000 on pin 6. LED_BUILTIN is set to
-  the correct LED pin independent of which board is used.
-  If you want to know what pin the on-board LED is connected to on your Arduino model, check
-  the Technical Specs of your board  at https://www.arduino.cc/en/Main/Products
-  
-  This example code is in the public domain.
+Information is encoded in the time the signal is either high or low.
+Every byte has a 8 'up and downs' for each bit
+   _ _         _ _ _ _
+...   |_ _ _ _|       |_ _ = [1,0,0,1] (or is it [0,1,1,0]?)
 
-  modified 8 May 2014
-  by Scott Fitzgerald
-  
-  modified 2 Sep 2016
-  by Arturo Guadalupi
-  
-  modified 8 Sep 2016
-  by Colby Newman
+TODO add a parity bit (req. bidirectional comms)
 */
 
 int incomingByte = 0;   // for incoming serial data
 
-#define SPEED (40)
+#define SPEED (1000)
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -37,40 +26,43 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-
-  if (Serial.available() > 0){
+  if (Serial.available() > 0) {
     incomingByte = Serial.read();
-    //flash();
-    //flash();
-
-    for (int i=0; i<8; i++) {
-       digitalWrite(LED_BUILTIN, HIGH);
-       myDelay(1*SPEED);
-       digitalWrite(LED_BUILTIN, LOW);
-      
-      if (incomingByte % 2 == 1) 
-         {
-          myDelay(2*SPEED);
-         }
-        else
-         {
-          myDelay(4*SPEED);
-         }
-         // if (i<7){
-            incomingByte = incomingByte / 2;                
-          //}
-               
-   }
+    /*byte bits[8] = {1, 0, 0, 0, 0, 1, 1, 0};
+    incomingByte = 0;
+    for (int j = 7; j >= 0; j--) {
+      incomingByte  = (incomingByte * 2) + bits[j];
+    }*/
 
     digitalWrite(LED_BUILTIN, HIGH);
-    myDelay(1*SPEED);
+    for (int i = 0; i < 8; i++) {
+
+      if (incomingByte % 2 == 1)
+      {
+        myDelay(2 * SPEED);
+      }
+      else
+      {
+        myDelay(4 * SPEED);
+      }
+      incomingByte = incomingByte / 2;
+      if (i % 2 == 0) {
+        digitalWrite(LED_BUILTIN, LOW);
+      }
+      else {
+        digitalWrite(LED_BUILTIN, HIGH);
+      }
+
+
+    }
+
     digitalWrite(LED_BUILTIN, LOW);
-    
-    myDelay(6*SPEED);
+    myDelay(6 * SPEED);
+
   }
 }
 
-void myDelay(int d){
+void myDelay(int d) {
   //accurate >3milliseconds
   //delay(d);
   //accurate >3micros, <16000micros
