@@ -1,7 +1,5 @@
 /*
 Receiving a message based on a timed protocol described in LaserSend.
-
-
 */
 
 const byte ledPin = 13;
@@ -23,7 +21,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
   pinMode(interruptPin, INPUT_PULLUP);
-  Serial.println("ready to receive......");
+  Serial.println("ready to receive...");
   attachInterrupt(digitalPinToInterrupt(interruptPin), blink, CHANGE);
 }
 
